@@ -11,11 +11,11 @@ void serveur(void){
 	socklen_t lenClt;
 	struct sockaddr_un mySockName, clt;
 	
-	// Déclaration & création d'une socket UNIX en mode DGRAM
+	// Déclaration & création d'une socket UNIX en mode STREAM
 	CHECK(se = socket(PF_UNIX, SOCK_STREAM, 0), "socket 1");
 	printf("N° de canal créé pour la socket %d\n", se);
 	
-	//préparation de l'adressage de la socket
+	// Préparation de l'adressage de la socket
 	mySockName.sun_family = PF_UNIX;
 	strcpy(mySockName.sun_path, "./sokUnix");
 	// Association la socket avec son adresse

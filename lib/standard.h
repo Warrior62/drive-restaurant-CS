@@ -22,10 +22,11 @@
 /*                           TYPEDEF                              */
 /******************************************************************/
 typedef char message_t[MAX_BUFF];
+typedef char action_t[MAX_BUFF];
 
 
 /******************************************************************/
-/*                           MACRO-FONCTIONS                      */
+/*                        MACRO-FONCTIONS                         */
 /******************************************************************/
 #define CHECK(sts, msg) if ((sts)==-1) {perror(msg); exit(-1);}
 
