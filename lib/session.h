@@ -7,3 +7,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+void creerSocketEcoute();
+void accepterClt();
+void creerSocketAppel();
+void connecterSrv();
