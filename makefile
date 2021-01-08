@@ -1,8 +1,8 @@
 all:
-session.o : session.c session.h
+session.o : session.c ./lib/session.h
 		gcc -o session.o -c session.c -Wall -O 
 
-data.o : data.c data.h
+data.o : data.c ./lib/data.h
 		gcc -o data.o -c data.c -Wall -O 
 	    
 repReq.o : repReq.c repReq.h
