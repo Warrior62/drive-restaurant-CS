@@ -1,14 +1,13 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+/******************************************************************/
+/*                           CONSTANTES                           */
+/******************************************************************/
+#define ADDR_SRV	"172.20.30.13"
 
-void creerSocketEcoute();
+
+/******************************************************************/
+/*                           FONCTIONS                            */
+/******************************************************************/
+int creerSocketEcoute(struct sockaddr_in seAdr);
+int creerSocketAppel(void);
 void accepterClt();
-void creerSocketAppel();
 void connecterSrv();
