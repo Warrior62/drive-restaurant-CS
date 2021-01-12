@@ -1,0 +1,11 @@
+{
+    "commandes": {
+        "0": {
+            "produits": [
+                { "nom": "p1", "quantite": 1, "sauce": "Blanche" },
+                { "nom": "p4", "quantite": 3, "sauce": "Hannibal" }
+            ],
+            "prix": 10
+        }
+    }
+}
