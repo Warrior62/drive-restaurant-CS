@@ -1,4 +1,6 @@
-#include <data.h>
+#include "./lib/data.h"
+#include "./lib/repReq.h"
+
 
 /**
  * @fn      void affichageProduits(); 
@@ -43,4 +45,12 @@ int calculerPrixCmd(){
         prixFinal += (tabQuantite[j] * tabPrix[j]); 
     
     return prixFinal;
+}
+
+char * req2str (const requete_t *req, message_t msg) {
+    // serialization d'une requête (structure) sous forme d'une chaîne de caractères
+    // c-à-d une suite d'octets
+    memset(msg, 0, MAX_BUFF);
+    sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
+    return msg;
 }

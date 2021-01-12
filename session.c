@@ -21,8 +21,17 @@ int creerSocketEcoute(struct sockaddr_in seAdr)
 	memset(&(seAdr.sin_zero), 0, 8);
 	// Association de la socket d'écoute avec l’adresse d'écoute
 	CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind()");
+	CHECK(listen(se, 0), "--PB : listen()");
 
     return se;
+}
+
+
+int creerSocketDiscussion(struct sockaddr *cltAdr, int * lenCltAdr, int se){
+	int sd;
+	CHECK(sd=accept(se, (struct sockaddr *)&cltAdr, &lenCltAdr),"-- PB : accept()");
+	printf("[SERVER]:Accepation de connexion du client [%s:%d]\n", inet_ntoa(cltAdr.sin_addr), ntohs(cltAdr.sin_port));
+	return sd;
 }
 
 
@@ -41,3 +50,16 @@ int creerSocketAppel(void)
 	// ICI, Pas de préparation ni d'association
 	return sad;
 }
+
+void envoyerRequete(int sad, char *msg){
+	CHECK(send(sad, msg, strlen(msg)+1, 0),"-- PB : send()");
+
+}
+
+void connecter(int sad, struct sockaddr * srvAdr){
+	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
+	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
+}
+
+
+
