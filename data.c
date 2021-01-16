@@ -26,11 +26,18 @@ void affichageProduits(){
 }
 
 
-int calculerPrixCmd(){
+/**
+ * @fn      int calculerPrixCmd(char *orderFilePath)
+ * @brief   calcule le prix total de la commande dont le fichier associé est passé en paramètre
+ * @param   orderFilePath   chemin du fichier associé à la commande
+ * @return  prix total de la commande
+ */ 
+int calculerPrixCmd(char *orderFilePath){
     FILE *f;
-    f = fopen("db/orders.txt", "rt");
+    f = fopen(orderFilePath, "rt");
     char id[20], quantite[20], prix[20], tabId[100], tabQuantite[100], tabPrix[100];
     int i=0, prixFinal=0;
+    
     printf("VOTRE COMMANDE\n");
     while(fscanf(f, "%s %s %s", id, prix, quantite) != EOF){
         strcpy(&tabId[i], id);

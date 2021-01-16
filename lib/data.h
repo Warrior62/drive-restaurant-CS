@@ -1,4 +1,4 @@
 #include "standard.h"
 
 void affichageProduits();
-int calculerPrixCmd();
+int calculerPrixCmd(char *orderFilePath);
