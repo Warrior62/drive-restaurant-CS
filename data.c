@@ -28,20 +28,6 @@ void affichageProduits(){
 }
 
 
-<<<<<<< HEAD
-int calculerPrixCmd(){
-    FILE *f;
-    f = fopen("db/orders.txt", "rt");
-    char id[20], quantite[20], prix[20], tabId[100], tabQuantite[100], tabPrix[100];
-    int i=0, prixFinal=0;
-    printf("VOTRE COMMANDE\n");
-    printf("***************************************\n");
-    while(fscanf(f, "%s %s %s", id, prix, quantite) != EOF){
-        strcpy(&tabId[i], id);
-        tabQuantite[i] = atoi(quantite);
-        tabPrix[i] = atoi(prix);
-        printf("\t%s %d %d\n", &tabId[i], tabQuantite[i], tabPrix[i]);
-=======
 /**
  * @fn      int calculerPrixCmd(char *orderFilePath)
  * @brief   calcule le prix total de la commande dont le fichier associé est passé en paramètre
@@ -62,7 +48,6 @@ int calculerPrixCmd(char *orderFilePath){
         strcpy(&tabProducts[i][1], nom);
         tabProducts[i][2] = atoi(prixUnitaire);
         // printf("\t%d %s %d\n", tabProducts[i][0], &tabProducts[i][1], tabProducts[i][2]);
->>>>>>> dev
         i++;
     }   
 
@@ -85,10 +70,6 @@ int calculerPrixCmd(char *orderFilePath){
     fclose(fCmd);
 
     return prixFinal;
-}
-
-void creerFichierCmd(){
-    system("touch db/order.txt");
 }
 
 
@@ -119,7 +100,7 @@ void creerFichierCmd(requete_t reqPrixCmd){
     // on crée un fichier de commande 
     // dont le nom est le numéro de la commande
 	strcpy(newFileName, "db/");
-    sprintf(numeroReq, "%d", reqPrixCmd.noReq);
+    sprintf(numeroReq, "%d", reqPrixCmd.noReq); 
 	strcat(newFileName, numeroReq);
 	strcat(newFileName, ".txt");
     printf("**%s**\n", newFileName);
