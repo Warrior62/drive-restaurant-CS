@@ -1,5 +1,6 @@
 #include "lib/standard.h"
 
+
 int main(){
     printf("Test main srv.c\n");
     return 0;
@@ -38,6 +39,9 @@ void serveur(void){
 	unlink(mySockName.sun_path);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 
 

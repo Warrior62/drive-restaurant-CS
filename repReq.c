@@ -1,10 +1,16 @@
+#include "lib/standard.h"
+
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
 void passerCmd(){
     message_t buff;
 	int sad = creerSocketAppel();
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> dev
     affichageProduits();
     envoyerRequete(sad, "[CLIENT] Passage de la commande...");
     // Attente d'une réponse
@@ -22,10 +28,23 @@ void demanderCmd(){}
 /*                           REPONSES                             */
 /******************************************************************/
 void annoncerPrixCmd(int sd, struct sockaddr_in *cltAdr){
+<<<<<<< HEAD
 	// Dialogue avec le client
 	// Ici, lecture d'une reqête et envoi d'une réponse
 	message_t buff;
 	int req;	
+=======
+	// Ici, lecture d'une reqête et envoi d'une réponse
+	message_t buff;
+	int req;
+	requete_t reqPrixCmd;	
+	char newFileName[50];
+	FILE *fCmd;
+
+    // récupération du fichier de la commande dernièrement passée
+    // calcul du prix final de la commande
+    // envoi le prix de la commande sous forme de réponse 
+>>>>>>> dev
 
 	memset(buff, 0, MAX_BUFF);
 	printf("\t[SERVER]: 1 - Attente de réception d'une commande\n");
@@ -35,6 +54,7 @@ void annoncerPrixCmd(int sd, struct sockaddr_in *cltAdr){
 			inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	sscanf(buff,"%d",&req);
 
+<<<<<<< HEAD
 	switch(req){
 		case 1 : printf("\t[SERVER]:Annonce du prix de la commande sur [%d]\n", sd);
 				 CHECK(send(sd, REPONSE1, strlen(REPONSE1)+1, 0),"-- PB : send()");
@@ -49,6 +69,14 @@ void annoncerPrixCmd(int sd, struct sockaddr_in *cltAdr){
 				 printf("\t\t[SERVER]:réponse envoyée : ##%s##\n", REPONSE3);
 				 break;
 	}
+=======
+	// on stocke dans newFileName le chemin du nouveau fichier de cmd créé
+	strcpy(newFileName, creerFichierCmd(fCmd, buff));
+	
+	// on annonce le prix de la commande au client
+	printf("\t[SERVER]:Annonce du prix de la commande sur [%d]\n", sd);
+	CHECK(send(sd, "Prix de la commande: " + calculerPrixCmd(newFileName), strlen(buff)+1, 0),"-- PB : send()");
+>>>>>>> dev
 	
 	CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
 	sleep(1);
@@ -57,5 +85,6 @@ void annoncerPrixCmd(int sd, struct sockaddr_in *cltAdr){
 
 void effectuerPaiement(){}
 void donnerCmd(){}
+
 
 
