@@ -14,6 +14,7 @@ void affichageProduits(){
     int i=0;
 
 	printf("NOTRE CARTE:\n");
+    printf("***************************************\n");
     // Je récupére l'ensemble du contenu du fichier f
     while(fscanf(f, "%s %s %s", id,nom,prix) != EOF){
         strcpy(&tabId[i], id);
@@ -22,6 +23,7 @@ void affichageProduits(){
         printf("\t%s %s %s\n", &tabId[i], &tabNom[i], &tabPrix[i]);
         i++;
     }        
+    printf("***************************************\n");
     fclose(f);
 }
 
@@ -32,6 +34,7 @@ int calculerPrixCmd(){
     char id[20], quantite[20], prix[20], tabId[100], tabQuantite[100], tabPrix[100];
     int i=0, prixFinal=0;
     printf("VOTRE COMMANDE\n");
+    printf("***************************************\n");
     while(fscanf(f, "%s %s %s", id, prix, quantite) != EOF){
         strcpy(&tabId[i], id);
         tabQuantite[i] = atoi(quantite);
@@ -46,6 +49,11 @@ int calculerPrixCmd(){
     
     return prixFinal;
 }
+
+void creerFichierCmd(){
+    system("touch db/order.txt");
+}
+
 
 char * req2str (const requete_t *req, message_t msg) {
     // serialization d'une requête (structure) sous forme d'une chaîne de caractères
