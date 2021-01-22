@@ -74,11 +74,11 @@ int calculerPrixCmd(char *orderFilePath){
 
 
 char * req2str (const requete_t *req, message_t msg) {
-    // serialization d'une requête (structure) sous forme d'une chaîne de caractères
-    // c-à-d une suite d'octets
-    memset(msg, 0, MAX_BUFF);
-    sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
-    return msg;
+// serialization d'une requête (structure) sous forme d'une chaîne de caractères
+// c-à-d une suite d'octets
+memset(msg, 0, MAX_BUFF);
+sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
+return msg;
 }
 
 requete_t *str2req (const message_t msg) {
@@ -124,3 +124,14 @@ void creerFichierCmd(requete_t reqPrixCmd){
     // on ferme le fichier de commande
     fclose(fCmd);
 }
+}
+	strcpy(req.params, strToken);
+	strToken = strtok(NULL,":");
+	
+	strcpy(req.action, strToken);
+	strToken = strtok(NULL,":");
+	
+	req.noReq = atoi(strToken);
+	char * strToken = strtok(str,":");
+	requete_t req;
+requete_t str2req(char * str){

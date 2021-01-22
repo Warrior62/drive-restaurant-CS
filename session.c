@@ -1,5 +1,7 @@
 #include "./lib/standard.h"
-#include "./lib/session.h"
+#include "lib/repReq.h"
+#include "lib/session.h"
+#include "lib/data.h"
 
 /**
  * @fn      int creerSocketEcoute(int se, struct sockaddr_in seAdr);  
@@ -27,10 +29,10 @@ int creerSocketEcoute(struct sockaddr_in seAdr)
 }
 
 
-int creerSocketDiscussion(struct sockaddr *cltAdr, int * lenCltAdr, int se){
+int creerSocketDiscussion(struct sockaddr_in *cltAdr, int * lenCltAdr, int se){
 	int sd;
 	CHECK(sd=accept(se, (struct sockaddr *)&cltAdr, &lenCltAdr),"-- PB : accept()");
-	printf("[SERVER]:Accepation de connexion du client [%s:%d]\n", inet_ntoa(cltAdr.sin_addr), ntohs(cltAdr.sin_port));
+	printf("[SERVER]:Accepation de connexion du client [%s:%d]\n", inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	return sd;
 }
 
@@ -56,9 +58,9 @@ void envoyerRequete(int sad, char *msg){
 
 }
 
-void connecter(int sad, struct sockaddr * srvAdr){
+void connecter(int sad, struct sockaddr_in * srvAdr){
 	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
-	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
+	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr->sin_addr), ntohs(srvAdr->sin_port), sad);	
 }
 
 

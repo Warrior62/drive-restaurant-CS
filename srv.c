@@ -1,5 +1,5 @@
 #include "lib/standard.h"
-
+#include "repReq.c"
 
 int main(){
     printf("Test main srv.c\n");
@@ -7,7 +7,7 @@ int main(){
 }
 
 void serveur(void){
-    message_t buff;	
+    	message_t buff;	
 	int se /* écoute */, sd /* dialogue */;
 	socklen_t lenClt;
 	struct sockaddr_un mySockName, clt;
@@ -28,6 +28,19 @@ void serveur(void){
 		memset(&buff, MAX_BUFF, (0));
 		printf("Attente de réception d'un message\n");
 		CHECK (recv(sd, buff, MAX_BUFF, 0), "recv");
+
+		requete_t req = str2req(buff, msg);
+		switch(req.noReq){
+		    case 1 : //passer commande
+		            annoncerPrixCmd(sd, req);
+		    break;
+		    case 2 : //demande de paiment
+		    break;
+		    case 3 : //paiement de la commande
+		    break;
+		    case 4: //demande de recupération de commande
+		    break;
+		}
 		printf("\tMessage reçu : ##%s## sur le canal %d\n", buff, sd);
 		printf("\tpar le canal client : ##%s##\n\n", clt.sun_path);
 		close(sd);
@@ -39,9 +52,5 @@ void serveur(void){
 	unlink(mySockName.sun_path);
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 
 
