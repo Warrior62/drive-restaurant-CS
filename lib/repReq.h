@@ -3,18 +3,18 @@
 /******************************************************************/
 /*                           FONCTIONS REQUETES                   */
 /******************************************************************/
-void passerCmd(){}
-void demanderPaiementCmd(){}
-void demanderCmd(){}
+void passerCmd();
+void demanderPaiementCmd();
+void demanderCmd();
 
 
 /******************************************************************/
 /*                           FONCTIONS REPONSES                   */
 /******************************************************************/
-void annoncerPrixCmd(){}
-void effectuerPaiementCmd(){}
-void verifierPaiementCmd(){}
-void donnerCmd(){}
+void annoncerPrixCmd();
+void effectuerPaiementCmd();
+void verifierPaiementCmd();
+void donnerCmd();
 
 
 /******************************************************************/
