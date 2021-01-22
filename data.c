@@ -124,14 +124,15 @@ void creerFichierCmd(requete_t reqPrixCmd){
     // on ferme le fichier de commande
     fclose(fCmd);
 }
-}
-	strcpy(req.params, strToken);
-	strToken = strtok(NULL,":");
-	
-	strcpy(req.action, strToken);
-	strToken = strtok(NULL,":");
-	
-	req.noReq = atoi(strToken);
-	char * strToken = strtok(str,":");
-	requete_t req;
+
 requete_t str2req(char * str){
+	requete_t req;
+	char * strToken = strtok(str,":");
+	req.noReq = atoi(strToken);
+	
+	strToken = strtok(NULL,":");
+	strcpy(req.action, strToken);
+	
+	strToken = strtok(NULL,":");
+	strcpy(req.params, strToken);
+}
