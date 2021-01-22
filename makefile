@@ -1,27 +1,29 @@
-all : exe
-
-exe: session.o data.o repReq.o ./clt/clt.o ./srv/srv.o	
-	gcc session.o repReq.o data.o ./clt/clt.o ./srv/srv.o -o exe
-
+all:
 session.o : session.c ./lib/session.h
 		gcc -o session.o -c session.c -Wall -O 
 
 data.o : data.c ./lib/data.h
 		gcc -o data.o -c data.c -Wall -O 
-	    
+
 repReq.o : repReq.c ./lib/repReq.h
 		gcc -o repReq.o -c repReq.c -Wall -O
 
-srv.o : ./srv/srv.c ./lib/standard.h
-		gcc -o srv.o -c ./srv/srv.c -Wall -0	
 
-clt.o : ./clt/clt.c
-		gcc -o clt.o -c ./clt/clt.c -Wall -0	
-	
+srv : serveur
+serveur : session.o data.o repReq.o srv.o 
+		gcc -o serveur session.o data.o repReq.o srv.o -Wall -O
+
+srv.o : srv.c ./lib/standard.h
+		gcc -o srv.o -c srv.c -Wall -O
+
+
+clt : client
+client : session.o data.o repReq.o clt.o 
+		gcc -o client session.o data.o repReq.o clt.o -Wall -O
+
+clt.o : clt.c ./lib/standard.h
+		gcc -o clt.o -c clt.c -Wall -O
+
+
 clean : 
-		rm -rf *.o
-
-
-
-
-
+		rm -f *.o core

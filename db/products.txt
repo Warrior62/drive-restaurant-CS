@@ -1,0 +1,9 @@
+p1 Cheeseburger 3
+p2 DoubleCheese 4 
+p3 TripleCheese 5 
+p4 Frites 2 
+p5 Potatoes 2 
+sauce1 Samourai 1
+sauce2 Blanche 1   
+sauce3 Hannibal 1   
+sauce4 Ketchup 1
