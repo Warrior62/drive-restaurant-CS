@@ -39,5 +39,9 @@ void serveur(void){
 	unlink(mySockName.sun_path);
 }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> dev
 
 

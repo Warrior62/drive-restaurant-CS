@@ -1,0 +1,10 @@
+                                    OK
+Requêtes client:                
+    passerCmd(){}                   
+    demanderPaiementCmd(){}
+    demanderCmd(){}
+
+Réponses serveur:
+    annoncerPrixCmd(){}
+    effectuerPaiement(){}
+    donnerCmd(){}

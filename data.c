@@ -14,6 +14,7 @@ void affichageProduits(){
     int i=0;
 
 	printf("NOTRE CARTE:\n");
+    printf("***************************************\n");
     // Je récupére l'ensemble du contenu du fichier f
     while(fscanf(f, "%s %s %s", id,nom,prix) != EOF){
         strcpy(&tabId[i], id);
@@ -22,6 +23,7 @@ void affichageProduits(){
         printf("\t%s %s %s\n", &tabId[i], &tabNom[i], &tabPrix[i]);
         i++;
     }        
+    printf("***************************************\n");
     fclose(f);
 }
 
@@ -70,6 +72,7 @@ int calculerPrixCmd(char *orderFilePath){
     return prixFinal;
 }
 
+
 char * req2str (const requete_t *req, message_t msg) {
     // serialization d'une requête (structure) sous forme d'une chaîne de caractères
     // c-à-d une suite d'octets
@@ -97,7 +100,7 @@ void creerFichierCmd(requete_t reqPrixCmd){
     // on crée un fichier de commande 
     // dont le nom est le numéro de la commande
 	strcpy(newFileName, "db/");
-    sprintf(numeroReq, "%d", reqPrixCmd.noReq);
+    sprintf(numeroReq, "%d", reqPrixCmd.noReq); 
 	strcat(newFileName, numeroReq);
 	strcat(newFileName, ".txt");
     printf("**%s**\n", newFileName);
