@@ -39,3 +39,4 @@ typedef char action_t[MAX_BUFF];
 /*                           FONCTIONS                            */
 /******************************************************************/
 void serveur(void);
+int sessionSrv(void);

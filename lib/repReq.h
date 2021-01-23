@@ -1,21 +1,5 @@
 #include "standard.h"
 
-/******************************************************************/
-/*                           FONCTIONS REQUETES                   */
-/******************************************************************/
-void passerCmd();
-void demanderPaiementCmd();
-void demanderCmd();
-
-
-/******************************************************************/
-/*                           FONCTIONS REPONSES                   */
-/******************************************************************/
-void annoncerPrixCmd();
-void effectuerPaiementCmd();
-void verifierPaiementCmd();
-void donnerCmd();
-
 
 /******************************************************************/
 /*                           STRUCTURES                           */
@@ -50,3 +34,20 @@ typedef struct {
     short typeRep;
     message_t result;
 } reponse_t;
+
+
+/******************************************************************/
+/*                           FONCTIONS REQUETES                   */
+/******************************************************************/
+void passerCmd();
+// void demanderPaiementCmd();
+// void demanderCmd();
+
+
+/******************************************************************/
+/*                           FONCTIONS REPONSES                   */
+/******************************************************************/
+void annoncerPrixCmd(int sd, requete_t req);
+// void effectuerPaiementCmd();
+// void verifierPaiementCmd();
+// void donnerCmd();
