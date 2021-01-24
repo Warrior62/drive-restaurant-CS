@@ -5,12 +5,16 @@
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
-void passerCmd(){
-    // message_t buff;
-    int sad = creerSocketAppel();
+void passerCmd(int sad){
+    message_t buff;
+    // int sad = creerSocketAppel();
     affichageProduits();
     envoyerRequete(sad, "[CLIENT] Passage de la commande...");
     // Attente d'une réponse
+	memset(buff, 0, MAX_BUFF);
+	CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv() -- passerCmd()");
+	printf("\t[CLIENT]:Réception d'une réponse sur [%d]\n", sad);
+	printf("\t\t[CLIENT]:Réponse reçue : ##%s##\n", buff);
 }
 
 // void demanderPaiementCmd(){}

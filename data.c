@@ -12,17 +12,18 @@ void affichageProduits(){
     char id[20], nom[20], prix[20], tabId[100], tabNom[100], tabPrix[100];
     int i=0;
 
-	printf("NOTRE CARTE:\n");
-    printf("***************************************\n");
+    printf("\n******************************\n");
+    printf("NOTRE CARTE:\n");
+    printf("------------\n");
     // Je récupére l'ensemble du contenu du fichier f
     while(fscanf(f, "%s %s %s", id,nom,prix) != EOF){
         strcpy(&tabId[i], id);
         strcpy(&tabNom[i], nom);
         strcpy(&tabPrix[i], prix);
-        printf("\t%s %s %s\n", &tabId[i], &tabNom[i], &tabPrix[i]);
+        printf("\t%s %s %s€\n", &tabId[i], &tabNom[i], &tabPrix[i]);
         i++;
     }        
-    printf("***************************************\n");
+    printf("******************************\n");
     fclose(f);
 }
 

@@ -16,4 +16,6 @@ int creerSocketDiscussion(struct sockaddr_in *cltAdr, socklen_t lenCltAdr, int s
 int creerSocketAppel(void);
 void envoyerRequete(int, char *);
 void connecter(int, struct sockaddr_in *srvAdr);
+void connectSrv(int sad);
 void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr);
+void dialClt2Srv(int sad, const char * MSG);

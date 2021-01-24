@@ -58,9 +58,9 @@ int sessionSrv(void) {
 	printf("[SERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se,
 				inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
 	// Mise de la socket à l'écoute
-	CHECK(listen(se, 5), "--PB : listen()");	// 5 est le nb de clients mis en attente
+	CHECK(listen(se, 3), "--PB : listen()");	// 5 est le nb de clients mis en attente
 	// Boucle permanente (1 serveur est un daemon)
-	printf("[SERVER]:Ecoute de demande de connexion (5 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
+	printf("[SERVER]:Ecoute de demande de connexion (3 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
 	return se;
 }
 

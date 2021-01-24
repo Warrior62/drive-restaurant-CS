@@ -39,7 +39,7 @@ typedef struct {
 /******************************************************************/
 /*                           FONCTIONS REQUETES                   */
 /******************************************************************/
-void passerCmd();
+void passerCmd(int sad);
 // void demanderPaiementCmd();
 // void demanderCmd();
 

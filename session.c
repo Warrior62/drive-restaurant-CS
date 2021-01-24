@@ -55,7 +55,6 @@ int creerSocketAppel(void)
 
 void envoyerRequete(int sad, char *msg){
 	CHECK(send(sad, msg, strlen(msg)+1, 0),"-- PB : send()");
-
 }
 
 void connecter(int sad, struct sockaddr_in * srvAdr){
@@ -91,6 +90,43 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
 	sleep(1);
 	// utiliser les getsockopts pour déterminer si le client a envoyé qq chose
+}
+
+void connectSrv(int sad) {
+	struct sockaddr_in srvAdr;
+	// le client doit fournir l'adresse du serveur
+	srvAdr.sin_family = PF_INET;
+	srvAdr.sin_port = htons(PORT_SRV);		
+	srvAdr.sin_addr.s_addr = inet_addr(ADDR_SRV);
+	memset(&(srvAdr.sin_zero), 0, 8);
+	// demande connexion 
+	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
+	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n",
+				inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
+}
+
+void dialClt2Srv(int sad, const char * MSG) {
+	struct sockaddr_in sadAdr;
+	socklen_t lenSadAdr;
+	message_t buff;
+	// Dialogue du client avec le serveur : while(..) { envoiRequete(); attenteReponse();}
+	// Ici on va se contenter d'envoyer un message et de recevoir une réponse	
+	// Envoi d'un message à un destinaire avec \0
+	printf("\t[CLIENT]:Envoi d'une requête sur [%d]\n", sad);
+	CHECK(send(sad, MSG, strlen(MSG)+1, 0),"-- PB : send()");
+	printf("\t\t[CLIENT]:requête envoyée : ##%s##\n", MSG);
+	// La socket client n'a pas éte bindée càd non adressée
+	// l'appel send a réalisé un bind (OS) : càd attribuer une adresse à la socket dyn
+	// getsockname permet de lire l'adressage de la socket
+	lenSadAdr = sizeof(sadAdr);
+	CHECK(getsockname(sad, (struct sockaddr *)&sadAdr, &lenSadAdr),"-- PB : bind()");
+	printf("\t\t[CLIENT]: avec l'adresse [%s:%d]\n",
+				inet_ntoa(sadAdr.sin_addr), ntohs(sadAdr.sin_port));
+	// Attente d'une réponse
+	memset(buff, 0, MAX_BUFF);
+	CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv()");
+	printf("\t[CLIENT]:Réception d'une réponse sur [%d]\n", sad);
+	printf("\t\t[CLIENT]:Réponse reçue : ##%s##\n", buff);
 }
 
 
