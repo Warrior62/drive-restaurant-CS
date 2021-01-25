@@ -13,7 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/sendfile.h>
-
+#include <pthread.h>
 
 
 /******************************************************************/
@@ -27,13 +27,13 @@
 /******************************************************************/
 typedef char message_t[MAX_BUFF];
 typedef char action_t[MAX_BUFF];
-
+typedef void * (*pf_t)(void *);
 
 /******************************************************************/
 /*                        MACRO-FONCTIONS                         */
 /******************************************************************/
 #define CHECK(sts, msg) if ((sts)==-1) {perror(msg); exit(-1);}
-
+#define CHECK_T(sts, msg) if ((sts)!=0) {perror(msg); exit(-1);}
 
 /******************************************************************/
 /*                           FONCTIONS                            */

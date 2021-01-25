@@ -5,7 +5,12 @@
 
 int main(){
     printf("Test main srv.c\n");
-	serveur();
+	pthread_t tid;
+	pthread_attr_t attr;
+	pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    CHECK_T(pthread_create(&tid, &attr, (pf_t)serveur, NULL), "erreur création thread serveur");
+    pthread_exit(EXIT_SUCCESS);
     return 0;
 }
 
@@ -13,7 +18,7 @@ void serveur(void){
 	//message_t buff;	
 	int se /* écoute */, sd /* dialogue */;
 	struct sockaddr_in clt;
-
+    printf("%d", getpid());
 	se = sessionSrv();
 	while (1) {
 		sd = creerSocketDiscussion(&clt, se);

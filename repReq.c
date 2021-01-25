@@ -17,10 +17,11 @@ void passerCmd(int sad){
     printf("Que voulez vous commander ? 0 pour valider\n");
     do{
         scanf("%c", &choix);
-        printf("%c", choix);
         if(choix != 48) req.params[i] = choix;
         i++;
     }while(choix != 48);
+    req.params[i] = 70;
+    printf("%s", req2str(&req,buff));
     envoyerRequete(sad, req2str(&req, buff));
     // Attente d'une réponse
 	memset(buff, 0, MAX_BUFF);

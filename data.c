@@ -77,7 +77,13 @@ char * req2str (const requete_t *req, message_t msg) {
     // serialization d'une requête (structure) sous forme d'une chaîne de caractères
     // c-à-d une suite d'octets
     memset(msg, 0, MAX_BUFF);
-    sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
+    int i = 0;
+    char * str;
+    while(req->params[i] != 70){
+        strncat(str, &req->params[i], 1);
+        i++;
+    }
+    sprintf(msg,"%hd:%s:%s", req->noReq, req->action, str);
     return msg;
 }
 
