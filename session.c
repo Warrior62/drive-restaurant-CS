@@ -18,7 +18,7 @@ int creerSocketEcoute()
 	printf("[SERVER]:Création de la socket d'écoute [%d]\n", se);
 	// Préparation d’un adressage pour une socket INET
 	seAdr.sin_family = PF_INET;
-	seAdr.sin_port = htons(ADDR_SRV);				// htons() : network order	
+	seAdr.sin_port = htons(PORT_SRV);				// htons() : network order	
 	seAdr.sin_addr.s_addr = inet_addr(ADDR_SRV);	// adresse effective
 	memset(&(seAdr.sin_zero), 0, 8);
 	// Association de la socket d'écoute avec l’adresse d'écoute
@@ -29,9 +29,10 @@ int creerSocketEcoute()
 }
 
 
-int creerSocketDiscussion(struct sockaddr_in *cltAdr, socklen_t lenCltAdr, int se){
+int creerSocketDiscussion(struct sockaddr_in *cltAdr, int se){
 	int sd;
-	CHECK(sd=accept(se, (struct sockaddr *)&cltAdr, &lenCltAdr),"-- PB : accept()");
+	socklen_t lenClt=sizeof(cltAdr);
+	CHECK(sd=accept(se, (struct sockaddr *)cltAdr, &lenClt),"-- PB : accept()");
 	printf("[SERVER]:Accepation de connexion du client [%s:%d]\n", inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	return sd;
 }
@@ -69,21 +70,24 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	
 	memset(buff, 0, MAX_BUFF);
 	printf("\t[SERVER]:Attente de réception d'une requête\n");
-	CHECK (recv(sd, buff, MAX_BUFF, 0), "PB-- recv()");
+	CHECK(recv(sd, buff, MAX_BUFF, 0), "PB-- recv()");
 	printf("\t[SERVER]:Requête reçue : ##%s##\n", buff);
 	printf("\t\t[SERVER]:du client d'adresse [%s:%d]\n",
 			inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	
 	requete_t req = str2req(buff);
-	switch(req.noReq){
+
+	printf("Je dois faire %s\n", req.action);
+	printf("Il a commandé %s", req.params);
+	switch(atoi(req.action)){
 		case 1 : //passer commande
-				annoncerPrixCmd(sd, req);
+				//annoncerPrixCmd(sd, req);
 		break;
 		case 2 : //demande de paiment
 		break;
 		case 3 : //paiement de la commande
 		break;
-		case 4: //demande de recupération de commande
+		case 4 : //demande de recupération de commande
 		break;
 	}
 
@@ -101,8 +105,7 @@ void connectSrv(int sad) {
 	memset(&(srvAdr.sin_zero), 0, 8);
 	// demande connexion 
 	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
-	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n",
-				inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
+	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
 }
 
 void dialClt2Srv(int sad, const char * MSG) {

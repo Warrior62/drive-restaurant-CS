@@ -7,9 +7,21 @@
 /******************************************************************/
 void passerCmd(int sad){
     message_t buff;
+    char choix;
+    int i = 0;
+    requete_t req;
+    req.noReq = 0;
+    strcpy(req.action, "1");
     // int sad = creerSocketAppel();
     affichageProduits();
-    envoyerRequete(sad, "[CLIENT] Passage de la commande...");
+    printf("Que voulez vous commander ? 0 pour valider\n");
+    do{
+        scanf("%c", &choix);
+        printf("%c", choix);
+        if(choix != 48) req.params[i] = choix;
+        i++;
+    }while(choix != 48);
+    envoyerRequete(sad, req2str(&req, buff));
     // Attente d'une réponse
 	memset(buff, 0, MAX_BUFF);
 	CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv() -- passerCmd()");
@@ -29,12 +41,7 @@ void annoncerPrixCmd(int sd, requete_t req){
     // Ici, lecture d'une reqête et envoi d'une réponse
     message_t buff;
     char newFileName[50], numReq[5];
-
-    // on stocke dans newFileName le chemin du nouveau fichier de cmd créé
-    strcpy(newFileName, "db/");
-    sprintf(numReq, "%d", req.noReq);
-    strcat(newFileName, numReq);
-    strcat(newFileName, ".txt");
+    strcpy(newFileName, creerFichierCmd(req));
 
     // on annonce le prix de la commande au client
     printf("\t[SERVER]:Annonce du prix de la commande sur [%d]\n", sd);

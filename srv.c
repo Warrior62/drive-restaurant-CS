@@ -13,32 +13,15 @@ void serveur(void){
 	//message_t buff;	
 	int se /* écoute */, sd /* dialogue */;
 	struct sockaddr_in clt;
-	socklen_t lenClt=sizeof(clt);
 
-	// Déclaration & création d'une socket UNIX en mode STREAM
-	se = creerSocketEcoute();
-	// Préparation de l'adressage de la socket
-	// mySockName.sin_family = PF_INET;
-	// strcpy(mySockName.sin_path, "./sockUnix");
-	// Association la socket avec son adresse
-	// CHECK(bind(se, (struct sockaddr *)&mySockName, sizeof(mySockName)),"bind serveur");
-	
-	// Mettre en place une socket d'écoute prête à la réception des connexions	
 	se = sessionSrv();
-	// Boucle infinie : attente requête / traitement de la requête
-	while (1) { 
-		// attente de connexion d'un client et création d'une socket de dialogue
-		sd = creerSocketDiscussion(&clt, lenClt, se);
-		// dialogue avec le client connecté
+	while (1) {
+		sd = creerSocketDiscussion(&clt, se);
 		dialSrv2Clt(sd, &clt);
-		// Fermeture de la socket de dialogue
 		getchar();
 		CHECK(close(sd),"-- PB : close()");
 	}
-	// fermeture de la socket
 	CHECK(close(se), "--PB : close(se)");
-	// suppresion de la socket
-	// unlink(mySockName.sun_path);
 }
 
 int sessionSrv(void) {
@@ -55,8 +38,7 @@ int sessionSrv(void) {
 	memset(&(seAdr.sin_zero), 0, 8);
 	// Association de la socket d'écoute avec l’adresse d'écoute
 	CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind() -- sessionSrv()");
-	printf("[SERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se,
-				inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
+	printf("[SERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
 	// Mise de la socket à l'écoute
 	CHECK(listen(se, 3), "--PB : listen()");	// 5 est le nb de clients mis en attente
 	// Boucle permanente (1 serveur est un daemon)

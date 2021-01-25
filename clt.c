@@ -4,8 +4,10 @@
 #include "lib/data.h"
 
 int main(){
-    int choix;
+    int choix = 1;
     printf("Test main clt.c\n");
+    int sad;
+    sad=sessionClt();
      while(choix){
          printf("Que voulez vous faire?\n");
          printf("1 - Commander\n");
@@ -15,39 +17,17 @@ int main(){
          printf("Votre choix: ");
          scanf("%d", &choix);
          switch(choix){
-             case 1 : client("Passage de commande souhaité !", 1);
+             case 1 :
+                 connectSrv(sad);
+                 passerCmd(sad);
              break;
-             case 2 : client("Paiement de commande souhaité!", 2);
+             case 2 : //payer
              break;
              case 3 : //Recuperer
              break;
          }
     }
     return 0;
-}
-
-void client(const char * MSG, int action) {
-	int sad /*socket appel et dialogue*/;
-
-	// Mise en place du socket d'appel PF_INET/STREAM adressée ou non
-	sad=sessionClt();
-	// Connexion avec un serveur
-	// la socket d'appel devient une socket de dialogue (connectée)
-	connectSrv(sad);
-	// Dialogue du client avec le serveur
-	// dialClt2Srv(sad, MSG);
-    switch (action)
-    {
-    case 1:
-        passerCmd(sad);
-        break;
-    
-    default:
-        break;
-    }
-	// Fermeture de la socket de dialogue
-	getchar();
-	CHECK(close(sad),"-- PB : close()");	
 }
 
 int sessionClt(void) {

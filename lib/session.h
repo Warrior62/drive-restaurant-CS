@@ -12,7 +12,7 @@
 /******************************************************************/
 void accepterClt();
 int creerSocketEcoute();
-int creerSocketDiscussion(struct sockaddr_in *cltAdr, socklen_t lenCltAdr, int se);
+int creerSocketDiscussion(struct sockaddr_in *cltAdr, int se);
 int creerSocketAppel(void);
 void envoyerRequete(int, char *);
 void connecter(int, struct sockaddr_in *srvAdr);

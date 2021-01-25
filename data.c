@@ -94,7 +94,7 @@ char * req2str (const requete_t *req, message_t msg) {
  * @param reqPrixCmd requête envoyée par le client pour passer sa commande
  * @note le nom du fichier de commande créé correspond au numéro de commande.txt
  */ 
-void creerFichierCmd(requete_t reqPrixCmd){
+char * creerFichierCmd(requete_t reqPrixCmd){
     char newFileName[50], numeroReq[50], tabProducts[100];
 
     // on crée un fichier de commande 
@@ -123,6 +123,7 @@ void creerFichierCmd(requete_t reqPrixCmd){
 
     // on ferme le fichier de commande
     fclose(fCmd);
+    return newFileName;
 }
 
 requete_t str2req(char * str){
