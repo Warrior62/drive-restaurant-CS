@@ -1,5 +1,4 @@
 #include "./lib/data.h"
-#include "./lib/repReq.h"
 
 
 /**
@@ -13,17 +12,18 @@ void affichageProduits(){
     char id[20], nom[20], prix[20], tabId[100], tabNom[100], tabPrix[100];
     int i=0;
 
-	printf("NOTRE CARTE:\n");
-    printf("***************************************\n");
+    printf("\n******************************\n");
+    printf("NOTRE CARTE:\n");
+    printf("------------\n");
     // Je récupére l'ensemble du contenu du fichier f
     while(fscanf(f, "%s %s %s", id,nom,prix) != EOF){
         strcpy(&tabId[i], id);
         strcpy(&tabNom[i], nom);
         strcpy(&tabPrix[i], prix);
-        printf("\t%s %s %s\n", &tabId[i], &tabNom[i], &tabPrix[i]);
+        printf("\t%s %s %s€\n", &tabId[i], &tabNom[i], &tabPrix[i]);
         i++;
     }        
-    printf("***************************************\n");
+    printf("******************************\n");
     fclose(f);
 }
 
@@ -74,19 +74,19 @@ int calculerPrixCmd(char *orderFilePath){
 
 
 char * req2str (const requete_t *req, message_t msg) {
-// serialization d'une requête (structure) sous forme d'une chaîne de caractères
-// c-à-d une suite d'octets
-memset(msg, 0, MAX_BUFF);
-sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
-return msg;
+    // serialization d'une requête (structure) sous forme d'une chaîne de caractères
+    // c-à-d une suite d'octets
+    memset(msg, 0, MAX_BUFF);
+    sprintf(msg,"%hd:%s:%s", req->noReq, req->action, req->params);
+    return msg;
 }
 
-requete_t *str2req (const message_t msg) {
-    requete_t *req = (requete_t *) malloc(sizeof(requete_t));
-    // dé-serialization d'une chaîne de caractères en requête (structure)
-    sscanf(msg,"%hd:%[^:]:%[^\n]", &req->noReq, req->action, req->params);
-    return req;
-}
+// requete_t *str2req (const message_t msg) {
+//     requete_t *req = (requete_t *) malloc(sizeof(requete_t));
+//     // dé-serialization d'une chaîne de caractères en requête (structure)
+//     sscanf(msg,"%hd:%[^:]:%[^\n]", &req->noReq, req->action, req->params);
+//     return req;
+// }
 
 /**
  * @fn  void creerFichierCmd(requete_t reqPrixCmd)
@@ -95,7 +95,7 @@ requete_t *str2req (const message_t msg) {
  * @note le nom du fichier de commande créé correspond au numéro de commande.txt
  */ 
 void creerFichierCmd(requete_t reqPrixCmd){
-    char newFileName[50], numeroReq[50], tabProducts[100], str[100];
+    char newFileName[50], numeroReq[50], tabProducts[100];
 
     // on crée un fichier de commande 
     // dont le nom est le numéro de la commande
@@ -124,14 +124,17 @@ void creerFichierCmd(requete_t reqPrixCmd){
     // on ferme le fichier de commande
     fclose(fCmd);
 }
-}
-	strcpy(req.params, strToken);
-	strToken = strtok(NULL,":");
-	
-	strcpy(req.action, strToken);
-	strToken = strtok(NULL,":");
-	
-	req.noReq = atoi(strToken);
-	char * strToken = strtok(str,":");
-	requete_t req;
+
 requete_t str2req(char * str){
+	requete_t req;
+	char * strToken = strtok(str,":");
+	req.noReq = atoi(strToken);
+	
+	strToken = strtok(NULL,":");
+	strcpy(req.action, strToken);
+	
+	strToken = strtok(NULL,":");
+	strcpy(req.params, strToken);
+
+    return req;
+}

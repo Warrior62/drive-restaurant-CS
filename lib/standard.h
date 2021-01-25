@@ -39,3 +39,6 @@ typedef char action_t[MAX_BUFF];
 /*                           FONCTIONS                            */
 /******************************************************************/
 void serveur(void);
+int sessionSrv(void);
+void client(const char * MSG, int action);
+int sessionClt(void);
