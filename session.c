@@ -72,16 +72,16 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	printf("\t[SERVER]:Attente de réception d'une requête\n");
 	CHECK(recv(sd, buff, MAX_BUFF, 0), "PB-- recv()");
 	printf("\t[SERVER]:Requête reçue : ##%s##\n", buff);
-	printf("\t\t[SERVER]:du client d'adresse [%s:%d]\n",
-			inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
+	printf("\t\t[SERVER]:du client d'adresse [%s:%d]\n", inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	
 	requete_t req = str2req(buff);
-
+    /**
 	printf("Je dois faire %s\n", req.action);
 	printf("Il a commandé %s", req.params);
+    */
+
 	switch(atoi(req.action)){
-		case 1 : //passer commande
-				//annoncerPrixCmd(sd, req);
+		case 1 : annoncerPrixCmd(sd, req);
 		break;
 		case 2 : //demande de paiment
 		break;

@@ -39,31 +39,38 @@ int calculerPrixCmd(char *orderFilePath){
     fCmd = fopen(orderFilePath, "rt");
     fProducts = fopen("db/products.txt", "rt");
     char id[20], nom[20], prixUnitaire[20], data[100];
-    char tabProducts[100][3];
+    produit_t tabProducts[100];
     int i=0, j=0, prixFinal=0, tabCmd[100];
-    
+    printf("premiere trace\n");
     //Stockage du contenu des produits dans un tableau tabProducts
     while(fscanf(fProducts, "%s %s %s", id, nom, prixUnitaire) != EOF){
-        tabProducts[i][0] = atoi(id);
-        strcpy(&tabProducts[i][1], nom);
-        tabProducts[i][2] = atoi(prixUnitaire);
-        // printf("\t%d %s %d\n", tabProducts[i][0], &tabProducts[i][1], tabProducts[i][2]);
+        tabProducts[i].id = atoi(id);
+        //strcpy(tabProducts[i].nom, nom);
+        tabProducts[i].id = atoi(prixUnitaire);
         i++;
+
     }   
 
     // Stockage du contenu de la commande dans un tableau tabCmd
     printf("VOTRE COMMANDE\n");
     while(fscanf(fCmd, "%s", data) != EOF){
+        printf("while");
         tabCmd[j] = atoi(data);
         printf("\t%d\n", tabCmd[j]);
         j++;
     }
-
+    printf("on a fini le while");
     // Calcul du prix de la commande
-    for(int k=0; k<j; k++)
-        for(int l=0; l<i; l++)
-            if(tabProducts[l][0] == tabCmd[k])
-                 prixFinal += tabProducts[l][2];
+    for(int k=0; k<j; k++) {
+        printf("for 1");
+        for (int l = 0; l < i; l++) {
+            printf("for 2");
+            if (tabProducts[l].id == tabCmd[k]) {
+                prixFinal += tabProducts[l].prixUnit;
+                printf("%d", prixFinal);
+            }
+        }
+    }
        
     // Fermeture des 2 fichiers
     fclose(fProducts);
@@ -78,11 +85,13 @@ char * req2str (const requete_t *req, message_t msg) {
     // c-à-d une suite d'octets
     memset(msg, 0, MAX_BUFF);
     int i = 0;
-    char * str;
+    char str[50] = "";
     while(req->params[i] != 70){
         strncat(str, &req->params[i], 1);
+        strcat(str, " ");
         i++;
     }
+    strncat(str, &req->params[i], 1);
     sprintf(msg,"%hd:%s:%s", req->noReq, req->action, str);
     return msg;
 }
@@ -100,36 +109,31 @@ char * req2str (const requete_t *req, message_t msg) {
  * @param reqPrixCmd requête envoyée par le client pour passer sa commande
  * @note le nom du fichier de commande créé correspond au numéro de commande.txt
  */ 
-char * creerFichierCmd(requete_t reqPrixCmd){
-    char newFileName[50], numeroReq[50], tabProducts[100];
+void creerFichierCmd(requete_t reqPrixCmd, char * newFileName){
+    char numeroReq[50];
 
     // on crée un fichier de commande 
     // dont le nom est le numéro de la commande
-	strcpy(newFileName, "db/");
-    sprintf(numeroReq, "%d", reqPrixCmd.noReq); 
-	strcat(newFileName, numeroReq);
-	strcat(newFileName, ".txt");
-    printf("**%s**\n", newFileName);
-
-    // on lit le champ params de la requête
-    char *ptr = strtok(reqPrixCmd.params, " ");
 
     // on insére les données de params dans le fichier de commande
     int i=0;
     FILE *fCmd = fopen(newFileName, "a");
-    while(ptr != NULL)
+    while(reqPrixCmd.params[i] != 70)
 	{
-        strcpy(&tabProducts[i], ptr);
-        printf("\n'%s'", &tabProducts[i]);
-	 	ptr = strtok(NULL, " ");
-        fwrite(&tabProducts[i], sizeof(tabProducts[i]), 1, fCmd);
-        fputs(" ", fCmd);
+        //printf("%c", reqPrixCmd.params[i]);
+        if(reqPrixCmd.params[i] != 13 && reqPrixCmd.params[i] != 10) {
+            fwrite(&reqPrixCmd.params[i], sizeof(reqPrixCmd.params[i]), 1, fCmd);
+            fputs(" ", fCmd);
+        }
         i++;
 	}
 
     // on ferme le fichier de commande
     fclose(fCmd);
-    return newFileName;
+    /**
+    char * strReturn = (char *) malloc(sizeof(char) * 10);
+    strcpy(strReturn, newFileName);
+    return strReturn;*/
 }
 
 requete_t str2req(char * str){
@@ -141,7 +145,32 @@ requete_t str2req(char * str){
 	strcpy(req.action, strToken);
 	
 	strToken = strtok(NULL,":");
-	strcpy(req.params, strToken);
+    int i = 0, j = 0;
+	while (strToken[j] != 70) {
+	    if(strToken[j] != 32) {
+	        req.params[i] = strToken[j];
+	        i++;
+	    }
+	    j++;
 
+    }
+	req.params[i] = 70;
     return req;
+}
+
+char * rep2str(const reponse_t * rep, message_t msg){
+    memset(msg, 0, MAX_BUFF);
+    sprintf(msg,"%hd:%s", rep->noCommande, rep->result);
+    return msg;
+}
+
+reponse_t str2rep(char * str){
+    reponse_t rep;
+    char * strToken = strtok(str,":");
+    rep.noCommande = atoi(strToken);
+
+    strToken = strtok(NULL,":");
+    strcpy(rep.result, strToken);
+
+    return rep;
 }

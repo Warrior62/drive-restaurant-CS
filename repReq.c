@@ -2,11 +2,13 @@
 // #include "lib/repReq.h"
 #include "lib/session.h"
 #include "lib/data.h"
+
+int incNoCommande = 0;
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
 void passerCmd(int sad){
-    message_t buff;
+    message_t buff, msg;
     char choix;
     int i = 0;
     requete_t req;
@@ -16,13 +18,13 @@ void passerCmd(int sad){
     affichageProduits();
     printf("Que voulez vous commander ? 0 pour valider\n");
     do{
+        fflush(stdin);
         scanf("%c", &choix);
-        if(choix != 48) req.params[i] = choix;
+        if(choix != 48 && choix != 10) req.params[i] = choix;
         i++;
     }while(choix != 48);
     req.params[i] = 70;
-    printf("%s", req2str(&req,buff));
-    envoyerRequete(sad, req2str(&req, buff));
+    envoyerRequete(sad, req2str(&req, msg));
     // Attente d'une réponse
 	memset(buff, 0, MAX_BUFF);
 	CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv() -- passerCmd()");
@@ -41,12 +43,32 @@ void passerCmd(int sad){
 void annoncerPrixCmd(int sd, requete_t req){
     // Ici, lecture d'une reqête et envoi d'une réponse
     message_t buff;
-    char newFileName[50], numReq[5];
-    strcpy(newFileName, creerFichierCmd(req));
 
-    // on annonce le prix de la commande au client
+    memset(buff, 0, MAX_BUFF);
+
+    char newFileName[50], numReq[5];
+
+    reponse_t rep;
+    rep.noCommande = ++incNoCommande;
+    req.noReq = rep.noCommande;
+
+    strcpy(newFileName, "db/");
+    sprintf(numReq, "%hd", req.noReq);
+    strcat(newFileName, numReq);
+    strcat(newFileName, ".txt\0");
+    printf("**%s**\n", newFileName);
+    creerFichierCmd(req, newFileName);
+
+    printf("on lance calculer prix cmd\n");
+    int prix = calculerPrixCmd(newFileName);
+    char * prixStr;
+    sprintf(prixStr, "%d", prix);
+    strcpy(rep.result, prixStr);
+
+
     printf("\t[SERVER]:Annonce du prix de la commande sur [%d]\n", sd);
-    CHECK(send(sd, "Prix de la commande: " + calculerPrixCmd(newFileName), strlen(buff)+1, 0),"-- PB : send()");
+    strcpy(buff, rep2str(&rep, buff));
+    CHECK(send(sd, buff, strlen(buff)+1, 0),"-- PB : send()");
 
     CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
     sleep(1);
