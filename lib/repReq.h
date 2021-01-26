@@ -31,7 +31,7 @@ typedef struct {
  *        4 : donner la commande
  */
 typedef struct {
-    short typeRep;
+    short noCommande;
     message_t result;
 } reponse_t;
 

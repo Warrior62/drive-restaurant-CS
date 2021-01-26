@@ -2,6 +2,16 @@
 
 void affichageProduits();
 int calculerPrixCmd(char *orderFilePath);
-char * creerFichierCmd(requete_t reqPrixCmd);
+void creerFichierCmd(requete_t, char *);
+
 requete_t str2req(char * str);
-char * req2str (const requete_t *, message_t);
+reponse_t str2rep(char * str);
+
+char * req2str(const requete_t *, message_t);
+char * rep2str(const reponse_t *, message_t );
+
+typedef struct {
+    int id;
+    char * nom;
+    int prixUnit;
+} produit_t;
