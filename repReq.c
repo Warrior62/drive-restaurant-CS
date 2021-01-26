@@ -2,6 +2,8 @@
 // #include "lib/repReq.h"
 #include "lib/session.h"
 #include "lib/data.h"
+
+
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
@@ -17,7 +19,8 @@ void passerCmd(int sad){
     printf("Que voulez vous commander ? 0 pour valider\n");
     do{
         scanf("%c", &choix);
-        if(choix != 48) req.params[i] = choix;
+        printf("-->%c\n", choix);
+        if(choix != 48 && choix != 10) req.params[i] = choix;
         i++;
     }while(choix != 48);
     req.params[i] = 70;
@@ -41,7 +44,7 @@ void passerCmd(int sad){
 void annoncerPrixCmd(int sd, requete_t req){
     // Ici, lecture d'une reqête et envoi d'une réponse
     message_t buff;
-    char newFileName[50], numReq[5];
+    char newFileName[50];
     strcpy(newFileName, creerFichierCmd(req));
 
     // on annonce le prix de la commande au client

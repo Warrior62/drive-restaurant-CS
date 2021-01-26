@@ -53,7 +53,7 @@ int calculerPrixCmd(char *orderFilePath){
 
     // Stockage du contenu de la commande dans un tableau tabCmd
     printf("VOTRE COMMANDE\n");
-    while(fscanf(fCmd, "%s", data) != EOF){
+    while(fread(fCmd, "%s", data) != EOF){
         tabCmd[j] = atoi(data);
         printf("\t%d\n", tabCmd[j]);
         j++;
@@ -78,7 +78,7 @@ char * req2str (const requete_t *req, message_t msg) {
     // c-à-d une suite d'octets
     memset(msg, 0, MAX_BUFF);
     int i = 0;
-    char * str;
+    char str[50] = "";
     while(req->params[i] != 70){
         strncat(str, &req->params[i], 1);
         i++;
