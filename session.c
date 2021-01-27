@@ -8,25 +8,30 @@
  * @brief   crée une socket à l'écoute de requête(s) client(s)
  * @note    associe aussi la socket d'écoute se à la structure d'adressage seAdr
  * @return  le numéro de la socket d'écoute créée
- */ 
-int creerSocketEcoute()
-{
-    int se;
-	struct sockaddr_in seAdr;
+ */
 
-	CHECK(se = socket(PF_INET, SOCK_STREAM, 0),"-- PB : socket()");
-	printf("[SERVER]:Création de la socket d'écoute [%d]\n", se);
-	// Préparation d’un adressage pour une socket INET
-	seAdr.sin_family = PF_INET;
-	seAdr.sin_port = htons(PORT_SRV);				// htons() : network order	
-	seAdr.sin_addr.s_addr = inet_addr(ADDR_SRV);	// adresse effective
-	memset(&(seAdr.sin_zero), 0, 8);
-	// Association de la socket d'écoute avec l’adresse d'écoute
-	CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind() - creerSocketEcoute()");
-	CHECK(listen(se, 0), "--PB : listen()");
+int sessionSrv(char * addr, int port) {
+    int se /*socket écoute*/;
+    struct sockaddr_in seAdr;
 
+    // Création d’une socket INET/STREAM : nécessite une connexion
+    CHECK(se = socket(PF_INET, SOCK_STREAM, 0),"-- PB : socket()");
+    printf("[SERVER]:Création de la socket d'écoute [%d]\n", se);
+    // Préparation d’un adressage pour une socket INET
+    seAdr.sin_family = PF_INET;
+    seAdr.sin_port = htons(port);				// htons() : network order
+    seAdr.sin_addr.s_addr = inet_addr(addr);	// adresse effective
+    memset(&(seAdr.sin_zero), 0, 8);
+    // Association de la socket d'écoute avec l’adresse d'écoute
+    CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind() -- sessionSrv()");
+    printf("[SERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
+    // Mise de la socket à l'écoute
+    CHECK(listen(se, 3), "--PB : listen()");	// 5 est le nb de clients mis en attente
+    // Boucle permanente (1 serveur est un daemon)
+    printf("[SERVER]:Ecoute de demande de connexion (3 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
     return se;
 }
+
 
 
 int creerSocketDiscussion(struct sockaddr_in *cltAdr, int se){
@@ -83,11 +88,11 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	switch(atoi(req.action)){
 		case 1 : annoncerPrixCmd(sd, req);
 		break;
-		case 2 : //demande de paiment
+		case 2 : //paiement de la commande
+		    printf("il veut payer");
 		break;
-		case 3 : //paiement de la commande
-		break;
-		case 4 : //demande de recupération de commande
+		case 3 : //demande de recupération de commande
+		    printf("il veut sa commande");
 		break;
 	}
 
@@ -96,16 +101,18 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	// utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
-void connectSrv(int sad) {
+void connectSrv(int sad, char * addr, int port) {
 	struct sockaddr_in srvAdr;
 	// le client doit fournir l'adresse du serveur
 	srvAdr.sin_family = PF_INET;
-	srvAdr.sin_port = htons(PORT_SRV);		
-	srvAdr.sin_addr.s_addr = inet_addr(ADDR_SRV);
+	srvAdr.sin_port = htons(port);
+	srvAdr.sin_addr.s_addr = inet_addr(addr);
 	memset(&(srvAdr.sin_zero), 0, 8);
 	// demande connexion 
 	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
-	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);	
+    CHECK_T(pthread_mutex_lock(&mutexEcran),"Pb lock mutexEcran");
+	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);
+    CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
 }
 
 void dialClt2Srv(int sad, const char * MSG) {

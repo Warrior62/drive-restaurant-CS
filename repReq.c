@@ -7,14 +7,14 @@ int incNoCommande = 0;
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
-void passerCmd(int sad){
+reponse_t passerCmd(int sad){
     message_t buff, msg;
     char choix;
     int i = 0;
     requete_t req;
     req.noReq = 0;
     strcpy(req.action, "1");
-    // int sad = creerSocketAppel();
+    CHECK_T(pthread_mutex_lock(&mutexEcran),"Pb lock mutexEcran");
     affichageProduits();
     printf("Que voulez vous commander ? 0 pour valider\n");
     do{
@@ -24,12 +24,17 @@ void passerCmd(int sad){
         i++;
     }while(choix != 48);
     req.params[i] = 70;
+    CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
     envoyerRequete(sad, req2str(&req, msg));
     // Attente d'une réponse
 	memset(buff, 0, MAX_BUFF);
 	CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv() -- passerCmd()");
+    CHECK_T(pthread_mutex_lock(&mutexEcran),"Pb lock mutexEcran");
 	printf("\t[CLIENT]:Réception d'une réponse sur [%d]\n", sad);
 	printf("\t\t[CLIENT]:Réponse reçue : ##%s##\n", buff);
+    CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
+	reponse_t rep = str2rep(buff);
+	return rep;
 }
 
 // void demanderPaiementCmd(){}
@@ -85,7 +90,15 @@ void annoncerPrixCmd(int sd, requete_t req){
     // utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
-// void effectuerPaiement(){}
+void effectuerPaiementCmd(int numCom, int prix, int sad){
+    requete_t req;
+    req.noReq = numCom;
+    req.action[0] = 2;
+    sprintf(req.params, "%d", prix);
+    message_t msg;
+    envoyerRequete(sad,req2str(&req, msg));
+
+}
 // void donnerCmd(){}
 
 

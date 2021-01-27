@@ -1,6 +1,7 @@
 #include "standard.h"
 
-
+pthread_mutex_t mutexEcran;
+pthread_mutex_t mutexClientPay;
 /******************************************************************/
 /*                           STRUCTURES                           */
 /******************************************************************/
@@ -39,7 +40,7 @@ typedef struct {
 /******************************************************************/
 /*                           FONCTIONS REQUETES                   */
 /******************************************************************/
-void passerCmd(int sad);
+reponse_t passerCmd(int sad);
 // void demanderPaiementCmd();
 // void demanderCmd();
 
@@ -48,6 +49,6 @@ void passerCmd(int sad);
 /*                           FONCTIONS REPONSES                   */
 /******************************************************************/
 void annoncerPrixCmd(int sd, requete_t req);
-// void effectuerPaiementCmd();
+void effectuerPaiementCmd(int, int, int);
 // void verifierPaiementCmd();
 // void donnerCmd();

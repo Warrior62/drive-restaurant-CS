@@ -20,7 +20,7 @@
 /*                           CONSTANTES                           */
 /******************************************************************/
 #define MAX_BUFF	512
-
+#define MAX_CLIENT 3
 
 /******************************************************************/
 /*                           TYPEDEF                              */
@@ -39,6 +39,9 @@ typedef void * (*pf_t)(void *);
 /*                           FONCTIONS                            */
 /******************************************************************/
 void serveur(void);
-int sessionSrv(void);
-void client(const char * MSG, int action);
+int sessionSrv(char *, int);
+void client(void);
+
 int sessionClt(void);
+
+
