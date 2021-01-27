@@ -27,6 +27,10 @@ int main(){
     return 0;
 }
 
+/**
+ * @fn void client(void) 
+ * @brief joue le rôle de thread client
+ */ 
 void client(){
     printf("je suis client\n");
     int prixCommande, numCommande;
@@ -59,6 +63,11 @@ void client(){
 
 }
 
+/**
+ * @fn void clientServeur(param_thread_t *)
+ * @brief crée un thread client faisant office de serveur pour être appelé 
+ * @param param_thread_t datas à passer en argument de pthread_create()
+ */ 
 void clientServeur(param_thread_t * params){
     int se /* écoute */, sd /* dialogue */;
     int fermer = 1;
@@ -78,7 +87,11 @@ void clientServeur(param_thread_t * params){
 
 }
 
-
+/**
+ * @fn int sessionClt(void)
+ * @brief établit une session client en créant une socket d'appel et de dialogue
+ * @return le numéro de la socket d'appel et de dialogue créée
+ */ 
 int sessionClt(void) {
 	int sad;
 	// Création d’une socket INET/STREAM d'appel et de dialogue

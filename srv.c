@@ -1,5 +1,3 @@
-// #include "lib/standard.h"
-// #include "repReq.c"
 #include "./lib/repReq.h"
 #include "./lib/session.h"
 
@@ -14,6 +12,10 @@ int main(){
     return 0;
 }
 
+/**
+ * @fn void serveur(void)
+ * @brief joue le rôle de serveur d'enregistrement ou de thread serveur
+ */ 
 void serveur(void){
 	//message_t buff;	
     int se /* écoute */, sd /* dialogue */;

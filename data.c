@@ -41,7 +41,7 @@ int calculerPrixCmd(char *orderFilePath){
     char id[20], nom[20], prixUnitaire[20], data[100];
     produit_t tabProducts[100];
     int i=0, j=0, prixFinal=0, tabCmd[100];
-    printf("premiere trace\n");
+    
     //Stockage du contenu des produits dans un tableau tabProducts
     while(fscanf(fProducts, "%s %s %s", id, nom, prixUnitaire) != EOF){
         tabProducts[i].id = atoi(id);
@@ -80,7 +80,13 @@ int calculerPrixCmd(char *orderFilePath){
     return prixFinal;
 }
 
-
+/**
+ * @fn char * req2str(const requete_t *, message_t)
+ * @brief convertit une requête en une chaîne de caractère 
+ * @param requete_t requête à convertir
+ * @param message_t message à transmettre au travers de la requête
+ * @return une chaîne de caractère
+ */ 
 char * req2str (const requete_t *req, message_t msg) {
     // serialization d'une requête (structure) sous forme d'une chaîne de caractères
     // c-à-d une suite d'octets
@@ -108,6 +114,7 @@ char * req2str (const requete_t *req, message_t msg) {
  * @fn  void creerFichierCmd(requete_t reqPrixCmd)
  * @brief créer le fichier de commande et le remplir avec les produits commandés
  * @param reqPrixCmd requête envoyée par le client pour passer sa commande
+ * @param newFileName nom du fichier à créer
  * @note le nom du fichier de commande créé correspond au numéro de commande.txt
  */ 
 void creerFichierCmd(requete_t reqPrixCmd, char * newFileName){
@@ -136,6 +143,12 @@ void creerFichierCmd(requete_t reqPrixCmd, char * newFileName){
     return strReturn;*/
 }
 
+/**
+ * @fn requete_t str2req(char * str)
+ * @brief convertit une chaîne de caractère contenant la requête en une requête
+ * @param str chaîne à convertir
+ * @return une requête de type requete_t
+ */ 
 requete_t str2req(char * str){
 	requete_t req;
 	char * strToken = strtok(str,":");
@@ -158,12 +171,25 @@ requete_t str2req(char * str){
     return req;
 }
 
+/**
+ * @fn char * req2str(const requete_t *, message_t)
+ * @brief convertit une requête en une chaîne de caractère 
+ * @param requete_t requête à convertir
+ * @param message_t message à transmettre au travers de la requête
+ * @return une chaîne de caractère
+ */ 
 char * rep2str(const reponse_t * rep, message_t msg){
     memset(msg, 0, MAX_BUFF);
     sprintf(msg,"%hd:%s", rep->noCommande, rep->result);
     return msg;
 }
 
+/**
+ * @fn reponse_t str2rep(char * str)
+ * @brief convertit une chaîne de caractère contenant la réponse en une réponse
+ * @param str chaîne à convertir
+ * @return une réponse de type reponse_t
+ */ 
 reponse_t str2rep(char * str){
     reponse_t rep;
     char * strToken = strtok(str,":");

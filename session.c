@@ -1,15 +1,13 @@
-// #include "./lib/standard.h"
-// #include "./lib/repReq.h"
 #include "./lib/session.h"
 #include "./lib/data.h"
 
 /**
- * @fn      int creerSocketEcoute(int se, struct sockaddr_in seAdr);  
- * @brief   crée une socket à l'écoute de requête(s) client(s)
- * @note    associe aussi la socket d'écoute se à la structure d'adressage seAdr
- * @return  le numéro de la socket d'écoute créée
- */
-
+ * @fn int sessionSrv(char *, int)
+ * @brief établit une session serveur en créant une socket d'écoute
+ * @param addr adresse IP à attribuer au serveur
+ * @param port numéro du port à attribuer au serveur
+ * @return le numéro de la socket d'écoute créée
+ */ 
 int sessionSrv(char * addr, int port) {
     int se /*socket écoute*/;
     struct sockaddr_in seAdr;
@@ -32,8 +30,13 @@ int sessionSrv(char * addr, int port) {
     return se;
 }
 
-
-
+/**
+ * @fn int creerSocketDiscussion(struct sockaddr_in *cltAdr, int se)
+ * @brief crée une socket de discussion
+ * @param cltAdr structure d'adressage du client
+ * @param se socket d'écoute
+ * @return le numéro de la socket de discussion créée
+ */ 
 int creerSocketDiscussion(struct sockaddr_in *cltAdr, int se){
 	int sd;
 	socklen_t lenClt=sizeof(cltAdr);
@@ -59,15 +62,34 @@ int creerSocketAppel(void)
 	return sad;
 }
 
+/**
+ * @fn void envoyerRequete(int, char *)
+ * @brief envoie une requête au serveur d'enregistrement
+ * @param sad socket d'appel et de dialogue
+ * @param msg message string à envoyer par la socket
+ */ 
 void envoyerRequete(int sad, char *msg){
 	CHECK(send(sad, msg, strlen(msg)+1, 0),"-- PB : send()");
 }
 
+/**
+ * @fn void connecter(int, struct sockaddr_in *srvAdr)
+ * @brief permet la connexion au serveur
+ * @param sad socket d'appel et de dialogue
+ * @param srvAdr structure d'adressage du serveur
+ */ 
 void connecter(int sad, struct sockaddr_in * srvAdr){
 	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
 	printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr->sin_addr), ntohs(srvAdr->sin_port), sad);	
 }
 
+/**
+ * @fn void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr)
+ * @brief permet le communication du serveur vers le client 
+ * @param sd socket de dialogue
+ * @param cltAdr structure d'adressage du client
+ * @note selon l'action à effectuer, le switch déclenche les réponses à envoyer
+ */ 
 void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	// Dialogue avec le client
 	// Ici, lecture d'une reqête et envoi d'une réponse
@@ -101,6 +123,13 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	// utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
+/**
+ * @fn void connectSrv(int sad, char *, int)
+ * @brief permet la connexion au serveur
+ * @param sad socket d'appel et de dialogue
+ * @param addr adresse IP à attribuer au serveur
+ * @param port numéro du port à attribuer au serveur
+ */ 
 void connectSrv(int sad, char * addr, int port) {
 	struct sockaddr_in srvAdr;
 	// le client doit fournir l'adresse du serveur
@@ -115,6 +144,12 @@ void connectSrv(int sad, char * addr, int port) {
     CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
 }
 
+/**
+ * @fn void dialClt2Srv(int sad, const char * MSG)
+ * @brief permet le communication du client vers le serveur 
+ * @param sad socket d'appel et de dialogue
+ * @param MSG message à envoyer au serveur lors d'une requête client
+*/ 
 void dialClt2Srv(int sad, const char * MSG) {
 	struct sockaddr_in sadAdr;
 	socklen_t lenSadAdr;

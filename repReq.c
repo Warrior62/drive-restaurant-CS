@@ -7,6 +7,12 @@ int incNoCommande = 0;
 /******************************************************************/
 /*                           REQUETES                             */
 /******************************************************************/
+/**
+ * @fn reponse_t passerCmd(int sad)
+ * @brief permet au client de donner les produits qu'il veut commander
+ * @param sad socket de d'appel et de dialogue
+ * @return une réponse reçue après annonce du prix de la commande
+ */ 
 reponse_t passerCmd(int sad){
     message_t buff, msg;
     char choix;
@@ -44,7 +50,12 @@ reponse_t passerCmd(int sad){
 /******************************************************************/
 /*                           REPONSES                             */
 /******************************************************************/
-
+/**
+ * @fn void annoncerPrixCmd(int sd, requete_t req)
+ * @brief annonce au client le prix de sa commande
+ * @param sd socket de dialogue
+ * @param req requête au travers de laquelle le passage de commande s'est produit
+ */
 void annoncerPrixCmd(int sd, requete_t req){
     // Ici, lecture d'une reqête et envoi d'une réponse
     message_t buff, copyBuff;
@@ -90,6 +101,13 @@ void annoncerPrixCmd(int sd, requete_t req){
     // utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
+/**
+ * @fn void effectuerPaiementCmd(int, int, int)
+ * @brief permet au client de payer sa commande
+ * @param numCom numéro de la commande à payer
+ * @param prix prix de la commande à payer
+ * @param sad socket d'appel et de dialogue
+ */ 
 void effectuerPaiementCmd(int numCom, int prix, int sad){
     requete_t req;
     req.noReq = numCom;

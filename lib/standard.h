@@ -38,10 +38,32 @@ typedef void * (*pf_t)(void *);
 /******************************************************************/
 /*                           FONCTIONS                            */
 /******************************************************************/
+/**
+ * @fn void serveur(void)
+ * @brief joue le rôle de serveur d'enregistrement ou de thread serveur
+ */ 
 void serveur(void);
+
+/**
+ * @fn int sessionSrv(char *, int)
+ * @brief établit une session serveur en créant une socket d'écoute
+ * @param addr adresse IP à attribuer au serveur
+ * @param port numéro du port à attribuer au serveur
+ * @return le numéro de la socket d'écoute créée
+ */ 
 int sessionSrv(char *, int);
+
+/**
+ * @fn void client(void) 
+ * @brief joue le rôle de thread client
+ */ 
 void client(void);
 
+/**
+ * @fn int sessionClt(void)
+ * @brief établit une session client en créant une socket d'appel et de dialogue
+ * @return le numéro de la socket d'appel et de dialogue créée
+ */ 
 int sessionClt(void);
 
 
