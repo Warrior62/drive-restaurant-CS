@@ -66,4 +66,6 @@ void client(void);
  */ 
 int sessionClt(void);
 
+int sessionCltSrv(char * addr, int port);
+
 

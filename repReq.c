@@ -98,13 +98,13 @@ void annoncerPrixCmd(int sd, requete_t req){
 }
 
 /**
- * @fn void effectuerPaiementCmd(int, int, int)
+ * @fn reponse_t effectuerPaiementCmd(int, int, int)
  * @brief permet au client de payer sa commande
  * @param numCom numéro de la commande à payer
  * @param prix prix de la commande à payer
  * @param sad socket d'appel et de dialogue
  */ 
-void effectuerPaiementCmd(int numCom, int prix, int sad){
+reponse_t effectuerPaiementCmd(int numCom, int prix, int sad){
     requete_t req;
     message_t buff;
     req.noReq = numCom;
@@ -119,6 +119,7 @@ void effectuerPaiementCmd(int numCom, int prix, int sad){
     printf("\t\t[CLIENT]:Réponse reçue : ##%s##\n", buff);
     CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
     reponse_t rep = str2rep(buff);
+    return rep;
 }
 // void donnerCmd(){}
 

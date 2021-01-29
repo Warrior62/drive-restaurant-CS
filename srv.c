@@ -19,7 +19,6 @@ int main(){
 void serveur(void){
 	//message_t buff;	
     int se /* écoute */, sd /* dialogue */;
-    int fermer = 1;
     struct sockaddr_in clt;
     printf("%d", getpid());
     se = sessionSrv(ADDR_SRV, PORT_SRV);

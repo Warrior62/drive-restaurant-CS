@@ -63,12 +63,12 @@ reponse_t passerCmd(int sad);
 void annoncerPrixCmd(int sd, requete_t req);
 
 /**
- * @fn void effectuerPaiementCmd(int, int, int)
+ * @fn reponse_t effectuerPaiementCmd(int, int, int)
  * @brief permet au client de payer sa commande
  * @param numCom numéro de la commande à payer
  * @param prix prix de la commande à payer
  * @param sad socket d'appel et de dialogue
  */ 
-void effectuerPaiementCmd(int, int, int);
+reponse_t effectuerPaiementCmd(int, int, int);
 // void verifierPaiementCmd();
 // void donnerCmd();
