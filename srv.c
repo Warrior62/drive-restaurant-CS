@@ -26,8 +26,9 @@ void serveur(void){
 	while (1) {
 		sd = creerSocketDiscussion(&clt, se);
 		dialSrv2Clt(sd, &clt);
-        getchar();
+        	getchar();
 		CHECK(close(sd),"-- PB : close()");
+		CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
 		/**
         printf("0 pour fermer le serveur\n");
         scanf("%d", &fermer);

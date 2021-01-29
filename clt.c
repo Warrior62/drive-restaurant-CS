@@ -19,7 +19,7 @@ int main(){
 
     CHECK_T(pthread_create(&tid[cpt+1], NULL, (pf_t)clientServeur, (void *) &params), "erreur création thread client");
 
-    for(cpt=0; cpt<MAX_CLIENT; cpt++)
+    for(cpt=0; cpt<MAX_CLIENT+1; cpt++)
         CHECK(pthread_join(tid[cpt], NULL), "pthread_join(client)");
 
     CHECK_T(pthread_mutex_destroy(&mutexEcran),"Pb destroy mutexEcran");
@@ -49,9 +49,9 @@ void client(){
     connectSrv(sad, ADDR_CLT_PAY, PORT_SRV_PAY);
 
 
-    CHECK_T(pthread_mutex_lock(&mutexClientPay),"Pb lock mutexClientPay");
-    effectuerPaiementCmd(numCommande, prixCommande, sad);
-    CHECK_T(pthread_mutex_unlock(&mutexClientPay),"Pb unlock mutexClientPay");
+    //CHECK_T(pthread_mutex_lock(&mutexClientPay),"Pb lock mutexClientPay");
+    //effectuerPaiementCmd(numCommande, prixCommande, sad);
+    //CHECK_T(pthread_mutex_unlock(&mutexClientPay),"Pb unlock mutexClientPay");
 
     pthread_exit(EXIT_SUCCESS);
     //Paiement de la commande;
@@ -70,19 +70,15 @@ void client(){
  */ 
 void clientServeur(param_thread_t * params){
     int se /* écoute */, sd /* dialogue */;
-    int fermer = 1;
     struct sockaddr_in clt;
     printf("%d", getpid());
-    se = sessionSrv(params->addr, params->port);
+    se = sessionCltSrv(params->addr, params->port);
     while(1){
         sd = creerSocketDiscussion(&clt, se);
-        dialSrv2Clt(sd, &clt);
+        dialClt2Clt(sd, &clt);
         getchar();
         CHECK(shutdown(sd, SHUT_RDWR),"-- PB : shutdown()");
         CHECK(close(sd),"-- PB : close()");
-        printf("0 pour fermer le clientServeur\n");
-        scanf("%d", &fermer);
-        if(fermer == 0) break;
     }
 
 }

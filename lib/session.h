@@ -71,3 +71,5 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr);
  * @param MSG message à envoyer au serveur lors d'une requête client
 */ 
 void dialClt2Srv(int sad, const char * MSG);
+
+void dialClt2Clt(int sd, struct sockaddr_in *cltAdr);

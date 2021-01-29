@@ -95,10 +95,6 @@ void annoncerPrixCmd(int sd, requete_t req){
     printf("--> PRIX COMMANDE : %s€\n", strPrixCmd);
     printf("Veuillez passer à la prochaine borne de commande !\n");
     CHECK(send(sd, buff, strlen(buff)+1, 0),"-- PB : send()");
-
-    CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
-    sleep(1);
-    // utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
 /**
@@ -110,12 +106,19 @@ void annoncerPrixCmd(int sd, requete_t req){
  */ 
 void effectuerPaiementCmd(int numCom, int prix, int sad){
     requete_t req;
+    message_t buff;
     req.noReq = numCom;
     req.action[0] = 2;
     sprintf(req.params, "%d", prix);
     message_t msg;
     envoyerRequete(sad,req2str(&req, msg));
-
+    memset(buff, 0, MAX_BUFF);
+    CHECK(recv(sad, buff, MAX_BUFF, 0),"-- PB : recv() -- passerCmd()");
+    CHECK_T(pthread_mutex_lock(&mutexEcran),"Pb lock mutexEcran");
+    printf("\t[CLIENT]:Réception d'une réponse sur [%d]\n", sad);
+    printf("\t\t[CLIENT]:Réponse reçue : ##%s##\n", buff);
+    CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
+    reponse_t rep = str2rep(buff);
 }
 // void donnerCmd(){}
 
