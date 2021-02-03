@@ -32,7 +32,7 @@ int main(){
  * @brief joue le rôle de thread client
  */ 
 void client(){
-    printf("je suis client\n");
+    printf("je suis un THREAD-CLIENT\n");
     int prixCommande, numCommande;
     //printf("Test main clt.c\n");
     //fflush(stdout);
@@ -73,8 +73,10 @@ void clientServeur(param_thread_t * params){
     struct sockaddr_in clt;
     printf("%d", getpid());
     se = sessionCltSrv(params->addr, params->port);
-    while(1){
+    while(1){    
+        printf("*** se = %d ***\n", se);
         sd = creerSocketDiscussion(&clt, se);
+        printf("*** sd = %d ***\n", sd);
         dialClt2Clt(sd, &clt);
         getchar();
         CHECK(shutdown(sd, SHUT_RDWR),"-- PB : shutdown()");
