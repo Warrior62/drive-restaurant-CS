@@ -17,7 +17,6 @@ int main(){
  * @brief joue le rôle de serveur d'enregistrement ou de thread serveur
  */ 
 void serveur(void){
-	//message_t buff;	
     int se /* écoute */, sd /* dialogue */;
     struct sockaddr_in clt;
     printf("%d", getpid());
@@ -25,14 +24,8 @@ void serveur(void){
 	while (1) {
 		sd = creerSocketDiscussion(&clt, se);
 		dialSrv2Clt(sd, &clt);
-        	getchar();
+        //getchar();
 		CHECK(close(sd),"-- PB : close()");
-		CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
-		/**
-        printf("0 pour fermer le serveur\n");
-        scanf("%d", &fermer);
-        if(fermer == 0) break;
-        */
 	}
 	CHECK(close(se), "--PB : close(se)");
 

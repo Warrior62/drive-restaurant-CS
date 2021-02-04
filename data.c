@@ -41,23 +41,18 @@ int calculerPrixCmd(char *orderFilePath){
     char id[20], nom[20], prixUnitaire[20], data[100];
     produit_t tabProducts[100];
     int i=0, j=0, prixFinal=0, tabCmd[100];
-    
-    //Stockage du contenu des produits dans un tableau tabProducts
+
     while(fscanf(fProducts, "%s %s %s", id, nom, prixUnitaire) != EOF){
         tabProducts[i].id = atoi(id);
-        //strcpy(tabProducts[i].nom, nom);
         tabProducts[i].prixUnit = atoi(prixUnitaire);
-        //printf("-->%d\n", tabProducts[i].prixUnit);
         i++;
     }   
 
     // Stockage du contenu de la commande dans un tableau tabCmd
-    printf("VOTRE COMMANDE\n");
     while(fscanf(fCmd, "%s", data) != EOF){
         if(atoi(data) != 0){
             if(atoi(data) != 0){
                 tabCmd[j] = atoi(data);
-                printf("\t%d\n", tabCmd[j]);
                 j++;
             }
         }

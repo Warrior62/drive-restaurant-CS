@@ -48,7 +48,7 @@ typedef struct {
  */ 
 reponse_t passerCmd(int sad);
 // void demanderPaiementCmd();
-// void demanderCmd();
+reponse_t demanderCmd(int,int);
 
 
 /******************************************************************/
@@ -70,5 +70,5 @@ void annoncerPrixCmd(int sd, requete_t req);
  * @param sad socket d'appel et de dialogue
  */ 
 reponse_t effectuerPaiementCmd(int, int, int);
-// void verifierPaiementCmd();
-// void donnerCmd();
+void verifierPaiementCmd(int , requete_t );
+void donnerCmd();

@@ -24,9 +24,9 @@ int sessionSrv(char * addr, int port) {
     CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind() -- sessionSrv()");
     printf("[SERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
     // Mise de la socket à l'écoute
-    CHECK(listen(se, 10), "--PB : listen()");	// 5 est le nb de clients mis en attente
+    CHECK(listen(se, 3), "--PB : listen()");	// 5 est le nb de clients mis en attente
     // Boucle permanente (1 serveur est un daemon)
-    printf("[SERVER]:Ecoute de demande de connexion (10 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
+    printf("[SERVER]:Ecoute de demande de connexion (3 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
     return se;
 }
 
@@ -46,9 +46,9 @@ int sessionCltSrv(char * addr, int port) {
     CHECK(bind(se, (struct sockaddr *)&seAdr, sizeof(seAdr)),"-- PB : bind() -- sessionSrv()");
     printf("[CLIENTSERVER]:Association de la socket [%d] avec l'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
     // Mise de la socket à l'écoute
-    CHECK(listen(se, 10), "--PB : listen()");	// 5 est le nb de clients mis en attente
+    CHECK(listen(se, 3), "--PB : listen()");	// 5 est le nb de clients mis en attente
     // Boucle permanente (1 serveur est un daemon)
-    printf("[CLIENTSERVER]:Ecoute de demande de connexion (10 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
+    printf("[CLIENTSERVER]:Ecoute de demande de connexion (3 max) sur le canal [%d] d'adresse [%s:%d]\n", se, inet_ntoa(seAdr.sin_addr), ntohs(seAdr.sin_port));
     return se;
 }
 
@@ -132,12 +132,6 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	switch(atoi(req.action)){
 		case 1 : annoncerPrixCmd(sd, req);
 		break;
-		case 2 : //paiement de la commande
-		    printf("il veut payer");
-		break;
-		case 3 : //demande de recupération de commande
-		    printf("il veut sa commande");
-		break;
 	}
 
 	CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
@@ -152,7 +146,6 @@ void dialClt2Clt(int sd, struct sockaddr_in *cltAdr) {
 	
 	memset(buff, 0, MAX_BUFF);
 	printf("\t[CLIENTSERVER]:Attente de réception d'une requête\n");
-	printf("socket_sd=%d\n", sd);
 	CHECK(recv(sd, buff, MAX_BUFF, 0), "PB-- recv()");
 	printf("\t[CLIENTSERVER]:Requête reçue : ##%s##\n", buff);
 	printf("\t\t[CLIENTSERVER]:du client d'adresse [%s:%d]\n", inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
@@ -161,16 +154,15 @@ void dialClt2Clt(int sd, struct sockaddr_in *cltAdr) {
 
 	switch(atoi(req.action)){
 		case 2 : //paiement de la commande
-		    printf("il veut payer");
+		    verifierPaiementCmd(sd, req);
 		break;
 		case 3 : //demande de recupération de commande
-		    printf("il veut sa commande");
+            donnerCmd(sd, req);
 		break;
 	}
 
 	CHECK(shutdown(sd, SHUT_WR),"-- PB : shutdown()");
 	sleep(1);
-	// utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
 /**
