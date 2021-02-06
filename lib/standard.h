@@ -20,7 +20,7 @@
 /*                           CONSTANTES                           */
 /******************************************************************/
 #define MAX_BUFF	512
-#define MAX_CLIENT 3
+#define MAX_CLIENT  3
 
 /******************************************************************/
 /*                           TYPEDEF                              */
@@ -66,6 +66,13 @@ void client(void);
  */ 
 int sessionClt(void);
 
+/**
+ * @fn int sessionCltSrv(char * addr, int port)
+ * @brief établit une session d'écoute entre le client-serveur et le client
+ * @param char numéro de l'adresse IP à attribuer au client-serveur
+ * @param int numéro du port à attribuer au client-serveur
+ * @return le numéro de la socket d'écoute créée
+ */
 int sessionCltSrv(char * addr, int port);
 
 

@@ -85,6 +85,13 @@ char * rep2str(const reponse_t *, message_t );
 void clientServeur(param_thread_t *);
 
 /**
+ * @fn void clientServeur(param_thread_t *)
+ * @brief crée un thread client faisant office de serveur pour être appelé 
+ * @param param_thread_t datas à passer en argument de pthread_create()
+ */ 
+void deroute(int signal_number);
+
+/**
  * @brief structure contenant les informations d'un produit commandé par le client
  */
 typedef struct {

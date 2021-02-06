@@ -47,8 +47,23 @@ typedef struct {
  * @return une réponse reçue après annonce du prix de la commande
  */ 
 reponse_t passerCmd(int sad, int);
-// void demanderPaiementCmd();
+
+/**
+ * @fn reponse_t demanderCmd(int sad, int noCommande)
+ * @brief permet au client de réclamer sa commande à la dernière borne
+ * @param sad socket d'appel et de dialogue
+ * @param noCommande numéro de la commande à réclamer
+ * @return une réponse contenant le buffer
+ */
 reponse_t demanderCmd(int,int);
+
+/**
+ * @fn reponse_t senregistrer(int sad, int type)
+ * @brief permet au client de s'enregistrer auprès du serveur d'enregistrement
+ * @param sad socket d'appel et de dialogue
+ * @param type numéro du type d'action à effectuer
+ * @return une réponse d'acquittement de l'envoi d'une demande d'enregistrement 
+ */
 reponse_t senregistrer(int, int);
 
 /******************************************************************/
@@ -70,6 +85,27 @@ void annoncerPrixCmd(int sd, requete_t req);
  * @param sad socket d'appel et de dialogue
  */ 
 reponse_t effectuerPaiementCmd(int, int, int);
+
+/**
+ * @fn void verifierPaiementCmd(int sd, requete_t req)
+ * @brief vérifie que le prix passé en paramètre est bien celui calculé précédemment
+ * @param int numéro de la socket de dialogue
+ * @param requete_t requête envoyée par le client pour payer
+ */ 
 void verifierPaiementCmd(int , requete_t );
+
+/**
+ * @fn void donnerCmd(int sd, requete_t req)
+ * @brief restitue la commande passée en borne°1 au client
+ * @param int numéro de la socket de dialogue
+ * @param requete_t requête envoyée par le client pour recevoir sa commande
+ */ 
 void donnerCmd();
+
+/**
+ * @fn void enregistrer(int sd, requete_t req)
+ * @brief confirme ou non au client qu'il s'est bien enregistré auprès du serveur d'enregistrement
+ * @param int numéro de la socket de dialogue
+ * @param requete_t requête envoyée par le client pour demander son enregistrement auprès du serveur d'enregistrement
+ */
 void enregistrer(int, requete_t);

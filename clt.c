@@ -1,5 +1,3 @@
-//#include "lib/standard.h"
-//#include "lib/repReq.h"
 #include "lib/session.h"
 #include "lib/data.h"
 
@@ -59,30 +57,26 @@ void client(){
     int prixCommande, numCommande;
     int sad;
 
+    // Enregistrement du client auprès du serveur d'enregistrement
     sad=sessionClt();
     connectSrv(sad, ADDR_SRV, PORT_SRV);
     reponse_t rep = senregistrer(sad,0);
     numCommande = rep.noCommande;
 
-    //Passage de la commande
+    // Passage de la commande
     sad=sessionClt();
     connectSrv(sad, ADDR_CLT_PAS, PORT_SRV_PAS);
     rep = passerCmd(sad, numCommande);
     prixCommande = atoi(rep.result);
 
-
-
-    //Paiement de la commande;
+    // Paiement de la commande
     sad=sessionClt();
     connectSrv(sad, ADDR_CLT_PAY, PORT_SRV_PAY);
-
     effectuerPaiementCmd(numCommande, prixCommande, sad);
 
-
-    //Recupération de la commande
+    // Récupération de la commande
     sad=sessionClt();
     connectSrv(sad, ADDR_CLT_REC, PORT_SRV_REC);
-
     demanderCmd(sad,numCommande);
 
     pthread_exit(EXIT_SUCCESS);
@@ -104,7 +98,7 @@ void clientServeur(param_thread_t * params){
 
     int se /* écoute */, sd /* dialogue */;
     struct sockaddr_in clt;
-    //printf("%d", getpid());
+
     se = sessionCltSrv(params->addr, params->port);
     while(1){
         sd = creerSocketDiscussion(&clt, se);
@@ -134,6 +128,12 @@ int sessionClt(void) {
 	return sad;
 }
 
+/**
+ * @fn void deroute(int signal_number) 
+ * @brief joue le rôle de gestionnaire de signaux
+ * @param int numéro du signal déclenché par le programme
+ * @note ici nous ne voulons détecter que le signal d'alarme pour finir le programme
+ */ 
 void deroute(int signal_number){
     switch(signal_number){
         case SIGALRM : exit(0);

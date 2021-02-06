@@ -30,6 +30,13 @@ int sessionSrv(char * addr, int port) {
     return se;
 }
 
+/**
+ * @fn int sessionCltSrv(char * addr, int port)
+ * @brief établit une session d'écoute entre le client-serveur et le client
+ * @param char numéro de l'adresse IP à attribuer au client-serveur
+ * @param int numéro du port à attribuer au client-serveur
+ * @return le numéro de la socket d'écoute créée
+ */
 int sessionCltSrv(char * addr, int port) {
     int se /*socket écoute*/;
     struct sockaddr_in seAdr;
@@ -123,10 +130,6 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	printf("\t\t[SERVER]:du client d'adresse [%s:%d]\n", inet_ntoa(cltAdr->sin_addr), ntohs(cltAdr->sin_port));
 	
 	requete_t req = str2req(buff);
-    /**
-	printf("Je dois faire %s\n", req.action);
-	printf("Il a commandé %s", req.params);
-    */
 
 	switch(atoi(req.action)){
         case 0 :
@@ -145,6 +148,12 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr) {
 	// utiliser les getsockopts pour déterminer si le client a envoyé qq chose
 }
 
+/**
+ * @fn void dialClt2Clt(int sd, struct sockaddr_in *cltAdr)
+ * @brief définit le type de réponse à envoyer entre le client-serveur et le client
+ * @param int le numéro de la socket de dialogue sur laquelle établir le dialogue
+ * @param sockaddr_in structure d'adressage du client-serveur
+ */
 void dialClt2Clt(int sd, struct sockaddr_in *cltAdr) {
 	// Dialogue avec le client
 	// Ici, lecture d'une reqête et envoi d'une réponse
@@ -159,13 +168,14 @@ void dialClt2Clt(int sd, struct sockaddr_in *cltAdr) {
 	requete_t req = str2req(buff);
 
 	switch(atoi(req.action)){
-        case 1 : annoncerPrixCmd(sd, req);
+        case 1 : //prise de commande 
+				annoncerPrixCmd(sd, req);
         break;
 		case 2 : //paiement de la commande
-		    verifierPaiementCmd(sd, req);
+		    	verifierPaiementCmd(sd, req);
 		break;
 		case 3 : //demande de recupération de commande
-            donnerCmd(sd, req);
+            	donnerCmd(sd, req);
 		break;
 	}
 
@@ -189,9 +199,7 @@ void connectSrv(int sad, char * addr, int port) {
 	memset(&(srvAdr.sin_zero), 0, 8);
 	// demande connexion 
 	CHECK(connect(sad, (struct sockaddr *)&srvAdr, sizeof(srvAdr)),"-- PB : connect()");
-    //CHECK_T(pthread_mutex_lock(&mutexEcran),"Pb lock mutexEcran");
     printf("[CLIENT]:Connexion effectuée avec le serveur [%s:%d] par le canal [%d]\n", inet_ntoa(srvAdr.sin_addr), ntohs(srvAdr.sin_port), sad);
-    //CHECK_T(pthread_mutex_unlock(&mutexEcran),"Pb unlock mutexEcran");
 }
 
 

@@ -65,14 +65,37 @@ int calculerPrixCmd(char *orderFilePath){
             if (tabProducts[l].id == tabCmd[k]) 
                 prixFinal += tabProducts[l].prixUnit;
           
-        
-    
-       
+     
     // Fermeture des 2 fichiers
     fclose(fProducts);
     fclose(fCmd);
 
     return prixFinal;
+}
+
+/**
+ * @fn  void creerFichierCmd(requete_t reqPrixCmd)
+ * @brief créer le fichier de commande et le remplir avec les produits commandés
+ * @param reqPrixCmd requête envoyée par le client pour passer sa commande
+ * @param newFileName nom du fichier à créer
+ * @note le nom du fichier de commande créé correspond au numéro de commande.txt
+ */ 
+void creerFichierCmd(requete_t reqPrixCmd, char * newFileName){
+    // on crée un fichier de commande 
+    // dont le nom est le numéro de la commande
+    // on insére les données de params dans le fichier de commande
+    int i=0;
+    FILE *fCmd = fopen(newFileName, "w");
+    while(reqPrixCmd.params[i] != 70)
+	{
+        if(reqPrixCmd.params[i] != 13 && reqPrixCmd.params[i] != 10 && reqPrixCmd.params[i] != 48) {
+            fwrite(&reqPrixCmd.params[i], sizeof(reqPrixCmd.params[i]), 1, fCmd);
+            fputs(" ", fCmd);
+        }
+        i++;
+	}
+    // on ferme le fichier de commande
+    fclose(fCmd);
 }
 
 /**
@@ -98,46 +121,6 @@ char * req2str (const requete_t *req, message_t msg) {
     return msg;
 }
 
-// requete_t *str2req (const message_t msg) {
-//     requete_t *req = (requete_t *) malloc(sizeof(requete_t));
-//     // dé-serialization d'une chaîne de caractères en requête (structure)
-//     sscanf(msg,"%hd:%[^:]:%[^\n]", &req->noReq, req->action, req->params);
-//     return req;
-// }
-
-/**
- * @fn  void creerFichierCmd(requete_t reqPrixCmd)
- * @brief créer le fichier de commande et le remplir avec les produits commandés
- * @param reqPrixCmd requête envoyée par le client pour passer sa commande
- * @param newFileName nom du fichier à créer
- * @note le nom du fichier de commande créé correspond au numéro de commande.txt
- */ 
-void creerFichierCmd(requete_t reqPrixCmd, char * newFileName){
-    //char numeroReq[50];
-
-    // on crée un fichier de commande 
-    // dont le nom est le numéro de la commande
-
-    // on insére les données de params dans le fichier de commande
-    int i=0;
-    FILE *fCmd = fopen(newFileName, "w");
-    while(reqPrixCmd.params[i] != 70)
-	{
-        //printf("%c", reqPrixCmd.params[i]);
-        if(reqPrixCmd.params[i] != 13 && reqPrixCmd.params[i] != 10 && reqPrixCmd.params[i] != 48) {
-            fwrite(&reqPrixCmd.params[i], sizeof(reqPrixCmd.params[i]), 1, fCmd);
-            fputs(" ", fCmd);
-        }
-        i++;
-	}
-    // on ferme le fichier de commande
-    fclose(fCmd);
-    /**
-    char * strReturn = (char *) malloc(sizeof(char) * 10);
-    strcpy(strReturn, newFileName);
-    return strReturn;*/
-}
-
 /**
  * @fn requete_t str2req(char * str)
  * @brief convertit une chaîne de caractère contenant la requête en une requête
@@ -160,8 +143,8 @@ requete_t str2req(char * str){
 	        i++;
 	    }
 	    j++;
-
     }
+    // Nous définissons 'F' comme caractère de fin de chaîne
 	req.params[i] = 70;
     return req;
 }

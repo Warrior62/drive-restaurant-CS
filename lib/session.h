@@ -4,7 +4,7 @@
 /*                           CONSTANTES                           */
 /******************************************************************/
 #define ADDR_SRV    "127.0.0.1"
-#define PORT_SRV     5000
+#define PORT_SRV      5000
 #define ADDR_CLT_PAS "127.0.0.2"
 #define PORT_SRV_PAS    5001
 #define ADDR_CLT_PAY "127.0.0.3"
@@ -74,4 +74,10 @@ void dialSrv2Clt(int sd, struct sockaddr_in *cltAdr);
 */ 
 void dialClt2Srv(int sad, const char * MSG);
 
+/**
+ * @fn void dialClt2Clt(int sd, struct sockaddr_in *cltAdr)
+ * @brief définit le type de réponse à envoyer entre le client-serveur et le client
+ * @param int le numéro de la socket de dialogue sur laquelle établir le dialogue
+ * @param sockaddr_in structure d'adressage du client-serveur
+ */
 void dialClt2Clt(int sd, struct sockaddr_in *cltAdr);

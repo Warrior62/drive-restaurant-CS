@@ -14,7 +14,7 @@ int main(){
 
 /**
  * @fn void serveur(void)
- * @brief joue le rôle de serveur d'enregistrement ou de thread serveur
+ * @brief joue le rôle de serveur d'enregistrement
  */ 
 void serveur(void){
     int se /* écoute */, sd /* dialogue */;
@@ -24,7 +24,6 @@ void serveur(void){
 	while (1) {
 		sd = creerSocketDiscussion(&clt, se);
 		dialSrv2Clt(sd, &clt);
-        //getchar();
 		CHECK(close(sd),"-- PB : close()");
 	}
 	CHECK(close(se), "--PB : close(se)");
